@@ -48,7 +48,6 @@ fi
 # (0 = nhc98 compiled with hbc; 1 = nhc98 compiled with nhc98)
 
 #USINGRTS=
-#ENDIAN=
 # (These flags are now sourced from machine-specific configuration)
 . $NHC98LIBDIR/$MACHINE/config
 
@@ -209,8 +208,6 @@ processArgs () {
     -hidir) shift; HIDIR=$1;;
     -o-dir=*)   OBJDIR=`echo $1 | cut -c8-` ;;
     -hi-dir=*)  HIDIR=`echo $1 | cut -c9-` ;;
-    -bigEnd)    ENDIAN="-DHIGH_BYTE_FIRST" ;;
-    -littleEnd) ENDIAN="-DLOW_BYTE_FIRST"  ;;
     -nomain)    MAINROUTINE="" ;;
     -noansiC)   CPPAS=${CPPDEFAULT}
                 COMPFLAGS=$COMPFLAGS" -"$1;;
@@ -351,9 +348,9 @@ case $GRFILES in
       then
         if test $VFLAG -eq 1
         then
-          echo $GRCC $ENDIAN $CPPFLAGS $CINCDIRS -c -x c -o $GROFILE $GRCFILE
+          echo $GRCC $CPPFLAGS $CINCDIRS -c -x c -o $GROFILE $GRCFILE
         fi
-        $GRCC $ENDIAN $CPPFLAGS $CINCDIRS -c -x c -o $GROFILE $GRCFILE
+        $GRCC $CPPFLAGS $CINCDIRS -c -x c -o $GROFILE $GRCFILE
         if test $? -ne 0
         then
           echo C compilation failed on ${BASENAME}_.$CSUFFIX after `basename $GREENCARD`
@@ -608,9 +605,9 @@ case $COMPFILES in
       then
         if test $VFLAG -eq 1
         then
-          echo $CPPAS $ENDIAN $CPPASFLAGS $CINCDIRS $TMPCPPASFILE -o $TMPASFILE
+          echo $CPPAS $CPPASFLAGS $CINCDIRS $TMPCPPASFILE -o $TMPASFILE
 	fi
-	$CPPAS $ENDIAN $CPPASFLAGS $CINCDIRS $TMPCPPASFILE -o - |\
+	$CPPAS $CPPASFLAGS $CINCDIRS $TMPCPPASFILE -o - |\
 	#	perl -e 'undef $/; $_ = <>; s/^ \s*\.local\s+startLabel\n \s*.comm\s+startLabel,0,4\n (\s*\.globa?l\s+[^\n]+)\n \s*\.data\n (\s*\.align\s*\d+)\n /"\t.data\n" ."$2\n" ."\t.type startLabel,STT_OBJECT\n" ."\t.size startLabel,0\n" ."startLabel:\n" ."$1\n" ."$2\n"/emx; print;' |\
 		sed -e '/.p2align 5/s/5/2/' |\
 		sed -e '/.align 5/s/5/2/' |\

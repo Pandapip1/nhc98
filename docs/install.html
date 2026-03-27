@@ -119,7 +119,7 @@ and runtime system concurrently if you wish.
 <p>
 The current distribution of the compiler will build for any machine
 with 32-bit words.  (Sorry, no 64-bit support yet.)  All questions of
-machine endian-ness are handled automatically during configuration.
+machine endian-ness are handled automatically by the compiler.
 If you are not using <em>gcc</em> as your C compiler, please ensure
 that your <em>CC</em> environment variable is set appropriately at
 the configuration stage.  (The C compiler is used as a portable
@@ -227,7 +227,7 @@ to know which.</p>
 
 <p> <code>$CC=/usr/local/uclibc-0.9.28-3/arm/bin/arm-linux-gcc 
 STRIP=/usr/local/uclibc-0.9.28-3/arm/bin/arm-linux-strip 
-./configure --target=arm-linux --endian=-DLOW_BYTE_FIRST 
+./configure --target=arm-linux 
 --ccoption="-O3" --ldoption="" 
 --cabal-parse=/home/sylvain/bin/nhc98/lib/nhc98/ix86-Linux/cabal-parse 
 --hostcc=gcc --hoststrip=strip --prefix=/home/sylvain/bin/nhc98-arm-linux 

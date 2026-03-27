@@ -99,7 +99,7 @@ $(OBJS_HASK): # $(SRCS) $(EXTRA_SRCS) # $(OBJDIR) $(OBJDIRS)
 
 # general build rule for making objects from C files
 ${OBJS_C}: ${OBJDIR}/%.$O : %.c
-	$(CC) -c -I$(INCDIR) $(ENDIAN) $(ARCH) $(CINCLUDES) \
+	$(CC) -c -I$(INCDIR) $(ARCH) $(CINCLUDES) \
 		$(shell echo ${COPTS}) $(EXTRA_C_FLAGS) -o $@ $<
 
 # general build rules for making bootstrap C files from Haskell files

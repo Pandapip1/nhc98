@@ -11,14 +11,26 @@ struct UnboxedArray {
 typedef struct UnboxedArray *UBA;
 extern void finaliseUBA (UBA);
 
-#ifdef HIGH_BYTE_FIRST
+#ifndef __BYTE_ORDER__
+#error "Could not determine target endianness"
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #if !defined(htonl)
 #define htonl(x) x
 #define ntohl(x) x
 #endif
-#else
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #if !defined(htonl)
 extern unsigned htonl(unsigned);
 extern unsigned ntohl(unsigned);
+#endif
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#if !defined(htonl)
+#error "TODO: Not implemented"
 #endif
 #endif

@@ -65,7 +65,6 @@
 #ifdef __arm
 
 #define CPU_KNOWN "arm"
-#define LOW_BYTE_FIRST
 
 #ifdef  STARTBYTECODE
    area byteCode,DATA
@@ -89,7 +88,6 @@
 #ifdef __sparc__
 
 #define CPU_KNOWN "sparc"
-/* #define HIGH_BYTE_FIRST */
 
 #ifdef __svr4__
 #ifdef STARTBYTECODE
@@ -120,10 +118,8 @@
 
 #ifdef __i386__
 
-#undef HIGH_BYTE_FIRST
 
 #define CPU_KNOWN "x86"
-/* #define LOW_BYTE_FIRST */
 
 #ifdef STARTBYTECODE
    .data
@@ -158,7 +154,6 @@
 #ifdef __hppa__
 
 #define CPU_KNOWN "hppa"
-/* #define HIGH_BYTE_FIRST */
 
 #ifdef STARTBYTECODE
    .data
@@ -182,7 +177,6 @@
 #ifdef __mc68000
 
 #define CPU_KNOWN "68000 (Unix)"
-/* #define HIGH_BYTE_FIRST */
 
 
 #ifdef STARTBYTECODE
@@ -207,12 +201,6 @@
 
 #define CPU_KNOWN "mips"
 
-#ifdef __sgi
-/* #define HIGH_BYTE_FIRST */
-#else
-/* #define LOW_BYTE_FIRST */
-#endif
-
 #ifdef STARTBYTECODE
    .data
 #endif
@@ -234,7 +222,6 @@
 #ifdef __alpha
 
 #define CPU_KNOWN "alpha"
-/* #define LOW_BYTE_FIRST */
 
 #ifdef STARTBYTECODE
   .data
@@ -280,18 +267,26 @@ Mips can not handle #error directives!
 #define LARGE_SIZE 26
 #endif
 
-#ifdef HIGH_BYTE_FIRST
+#ifndef __BYTE_ORDER__
+#error "Could not detect target endianness"
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define JT(h)            DB (((h)>>8)&0xff),((h)&0xff)
 #define HW(b,a)          ((a) | ((b) << (4*NS)))
 #define FSTHW(w)         ((w)>>(4*NS))
 #define SNDHW(w)         ((w)&( (1<<(4*NS))-1))
 #endif
 
-#ifdef LOW_BYTE_FIRST
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #define JT(h)            DB ((h)&0xff),(((h)>>8)&0xff)
 #define HW(b,a)          ((b) | ((a) << (4*NS)))
 #define FSTHW(w)         ((w)&( (1<<(4*NS))-1))
 #define SNDHW(w)         ((w)>>(4*NS))
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#error "Could not detect target endianness"
 #endif
 
 #define VAPTAG(fun)       L(fun) - (NS + 2) + VAP_TAG 

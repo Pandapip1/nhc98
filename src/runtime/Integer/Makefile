@@ -15,7 +15,7 @@ HEADERS = gmp-mparam.h
 
 WARNING = $(shell if [ $(GCCVERSION) \> 4.2 ]; then echo -Wno-pointer-to-int-cast; fi )
 
-CFLAGS= -I../Kernel -I${INCDIR} ${DCFG} ${OPT} ${ENDIAN} ${ARCH} \
+CFLAGS= -I../Kernel -I${INCDIR} ${DCFG} ${OPT} ${ARCH} \
 	$(shell echo ${COPTS}) $(WARNING)
 
 LINKS = flt.h

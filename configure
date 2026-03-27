@@ -158,7 +158,6 @@ do
     --docdir=*)  DOCDIR=`echo "$1" | cut -c10-` ;;
 #   --hbcdir=*)  HBCDIR=`echo "$1" | cut -c10-` ;;
 #   --ghcdir=*)  GHCDIR=`echo "$1" | cut -c10-` ;;
-    --endian=*)  ENDIAN=`echo "$1" | cut -c10-` ;;
     --ccoption=*)  BACKCCOPTIONS=`echo "$1" | cut -c12-` ;;
     --ldoption=*)  BACKLDOPTIONS=`echo "$1" | cut -c12-` ;;
     --cabal-parse=*)  CABALPARSE=`echo "$1" | cut -c15-` ;;
@@ -202,7 +201,6 @@ do
   echo "    --target=TARGET    configure for building compilers for TARGET [HOST]"
   echo "    --hostcc=path      path to the host compiler [mandatory]"
   echo "    --hoststrip=path   path to the host strip command [mandatory]"
-  echo "    --endian=flag      -DLOW_BYTE_FIRST (little endian) | -DHIGH_BYTE_FIRST (big endian) [mandatory]"
   echo "    --ccoption=flags   C options for the back-end compiler called by nhc98 [-m32]"
   echo "    --ldoption=flags   LD options for the back-end linker called by nhc98 [-m32]"
   echo "    --intsize=32       (nhc98 only support 32 bits compatible architectures by now)"
@@ -423,44 +421,6 @@ then
   then echo "You gave the following extra build options: $BUILDOPTS"
   fi
 
-  echo -n "This machine's endian-ness is:              "
-  if [ "$TARGET" != "" ]
-  then
-    case $ENDIAN in
-    -DLOW_BYTE_FIRST) echo "$ENDIAN";;
-    -DHIGH_BYTE_FIRST) echo "$ENDIAN";;
-    "") echo "error: for a cross-compiler, you must use --endian to specify it" && exit 1;;
-    *) echo "unknown value. try ./configure --help" && exit 1;;
-    esac
-  else
-
-  if [ "$ENDIAN" = "" ]
-  then
-    cat >endian.c <<!!!
-main() {
-  union {
-    unsigned i;
-    char s[4];
-  } convert;
-  convert.i = 0x32;
-  if (convert.s[0]==0x32) {
-    puts("-DLOW_BYTE_FIRST");
-  } else {
-    puts("-DHIGH_BYTE_FIRST");
-  }
-}
-!!!
-    $HOSTCCC -m32 $COPTS -o endian endian.c
-    ENDIAN=`./endian`
-    rm -f endian$EXE endian.c
-    echo -n "$ENDIAN "
-    echo '(detected) '
-  else
-    echo -n "$ENDIAN "
-    echo '(cached) '
-  fi
-  fi
-
   if [ "$EXE" = "" ]
   then echo "Executables need .exe suffix?               no  (detected)"
   else echo "Executables need .exe suffix?               yes (detected)"
@@ -646,7 +606,6 @@ then
     echo "Adding Makefile config script to"
     echo "    $BUILDLIBDIR/$MACHINE..."
     ( echo "MACHINE=$MACHINE";
-      echo "ENDIAN=$ENDIAN";
       echo "BUILDWITH=$BUILDWITH";
       echo "BUILDOPTS=\"$BUILDOPTS\"";
       case $RTSFLAG in
@@ -1010,7 +969,6 @@ echo "Saving current configuration in targets/$MACHINE/config.cache"
   echo "HOSTSTRIP=$HOSTSTRIP" ;
   echo "CABALPARSE=$CABALPARSE" ;
   echo "COPTS=\"$COPTS\"";
-  echo "ENDIAN=$ENDIAN" ;
   echo "BACKCCOPTIONS=\"$BACKCCOPTIONS\"";
   echo "BACKLDOPTIONS=\"$BACKLDOPTIONS\"";
   echo "HEAP=$HEAP" ;

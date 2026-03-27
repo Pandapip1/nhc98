@@ -13,6 +13,10 @@
 --
 -----------------------------------------------------------------------------
 
+#ifndef __BYTE_ORDER__
+#error "Could not detect target endianness"
+#endif
+
 -- #hide
 module GHC.IO.Encoding.Iconv (
 #if !defined(mingw32_HOST_OS)
@@ -116,12 +120,16 @@ foreign import ccall unsafe "localeEncoding"
     c_localeEncoding :: IO CString
 
 haskellChar :: String
-#ifdef WORDS_BIGENDIAN
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 haskellChar | charSize == 2 = "UTF-16BE"
             | otherwise     = "UTF-32BE"
-#else
+#endif
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 haskellChar | charSize == 2 = "UTF-16LE"
             | otherwise     = "UTF-32LE"
+#endif
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#error "TODO: Not implemented"
 #endif
 
 char_shift :: Int

@@ -25,12 +25,22 @@
 #endif
 #define SNBIGIT 1
 
-#ifdef HIGH_BYTE_FIRST
+#ifndef __BYTE_ORDER__
+#error "Could not determine target endianness"
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define LL 1
 #define HH 0
-#else
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #define LL 0
 #define HH 1
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#error "TODO: Not implemented"
 #endif
 
 #define BASE 4294967296.0

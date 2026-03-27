@@ -30,10 +30,10 @@ endif
 
 OBJS = ${AOBJS} ${SOBJS} ${OOBJS}
 
-CFLAGSNOOPT = ${DCFG} ${BUGFIX} ${ENDIAN} ${ARCH} -I${INCDIR} \
+CFLAGSNOOPT = ${DCFG} ${BUGFIX} ${ARCH} -I${INCDIR} \
          -DVERSION="\"$(VERSION)\"" $(shell echo ${COPTS}) #-DBYTECODE_PROF
 CFLAGS = ${CFLAGSNOOPT} ${OPT}
-CPP = $(CC) ${DCFG} ${ENDIAN} -E 
+CPP = $(CC) ${DCFG} -E 
 LDFLAGS = -r
 AS = $(CC) -c
 

@@ -42,7 +42,7 @@ OBJS = $(patsubst %.c,${OBJDIR}/%.o,${SRCS})
 
 WARNING = $(shell if [ $(GCCVERSION) \> 4.2 ]; then echo -Wno-pointer-to-int-cast; fi)
 
-CFLAGS= -I../Kernel -I${INCDIR} ${DCFG} ${BUGFIX} ${OPT} ${ENDIAN} ${ARCH} \
+CFLAGS= -I../Kernel -I${INCDIR} ${DCFG} ${BUGFIX} ${OPT} ${ARCH} \
 	$(shell echo ${COPTS}) $(WARNING)
 
 ${OBJS}: ${OBJDIR}/%.o: %.c

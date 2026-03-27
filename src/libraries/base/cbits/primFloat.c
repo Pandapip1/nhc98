@@ -8,7 +8,14 @@
  * ---------------------------------------------------------------------------*/
 
 #include "HsFFI.h"
-#include "Rts.h" // XXX wrong (for IEEE_FLOATING_POINT and WORDS_BIGENDIAN)
+
+#if !defined(__BYTE_ORDER__) || !defined(__FLOAT_WORD_ORDER__)
+#error "Could not detect target endianness"
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#error "TODO: Not implemented"
+#endif
 
 #define IEEE_FLOATING_POINT 1
 
@@ -17,7 +24,7 @@ union stg_ieee754_flt
    float f;
    struct {
 
-#if WORDS_BIGENDIAN
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int negative:1;
 	unsigned int exponent:8;
 	unsigned int mantissa:23;
@@ -29,7 +36,7 @@ union stg_ieee754_flt
    } ieee;
    struct {
 
-#if WORDS_BIGENDIAN
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int negative:1;
 	unsigned int exponent:8;
 	unsigned int quiet_nan:1;
@@ -58,13 +65,13 @@ union stg_ieee754_dbl
    double d;
    struct {
 
-#if WORDS_BIGENDIAN
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int negative:1;
 	unsigned int exponent:11;
 	unsigned int mantissa0:20;
 	unsigned int mantissa1:32;
 #else
-#if FLOAT_WORDS_BIGENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int mantissa0:20;
 	unsigned int exponent:11;
 	unsigned int negative:1;
@@ -80,14 +87,14 @@ union stg_ieee754_dbl
     /* This format makes it easier to see if a NaN is a signalling NaN.  */
    struct {
 
-#if WORDS_BIGENDIAN
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int negative:1;
 	unsigned int exponent:11;
 	unsigned int quiet_nan:1;
 	unsigned int mantissa0:19;
 	unsigned int mantissa1:32;
 #else
-#if FLOAT_WORDS_BIGENDIAN
+#if __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
 	unsigned int mantissa0:19;
 	unsigned int quiet_nan:1;
 	unsigned int exponent:11;

@@ -24,21 +24,6 @@
 #undef STARTBYTECODE
 #include "bytecode.h"
 
-#if defined(LOW_BYTE_FIRST) && defined(HIGH_BYTE_FIRST)
-#error "Can't do -bigEnd and -littleEnd together!"
-#endif
-
-#if !defined(LOW_BYTE_FIRST) && !defined(HIGH_BYTE_FIRST)
-#if defined(__sparc__) || defined(__hppa__) || defined(__mc68000) || \
-    defined(__sgi) || defined(__alpha) || defined(__PPC__) || defined(_POWER)
-#define HIGH_BYTE_FIRST
-#elif defined(__arm) || defined(__i386__) || defined(__mips)
-#define LOW_BYTE_FIRST
-#else
-#error "Can't find default endian-ness for this machine."
-#endif
-#endif
-
 #define IND_TAG 0
  
 #define VAP_TAG  1
@@ -96,8 +81,11 @@
 #define LARGE_SIZE 26
 #endif
 
- 
-#ifdef HIGH_BYTE_FIRST
+#ifndef __BYTE_ORDER__
+#error "Could not determine target endianness"
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define TOP(h)		(((h)>>8)&0xff)
 #define BOT(h)		((h)&0xff)
 #define HW(b,a)          ((a) | ((b) << (4*NS)))
@@ -109,7 +97,7 @@
 					    (d&0xff))
 #endif
  
-#ifdef LOW_BYTE_FIRST
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 #define TOP(h)		((h)&0xff)
 #define BOT(h)		(((h)>>8)&0xff)
 #define HW(b,a)          ((b) | ((a) << (4*NS)))
@@ -119,6 +107,10 @@
 					   ((c&0xff)<<16) + \
 					   ((b&0xff)<<8)  + \
 					    (a&0xff))
+#endif
+
+#if __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#error "TODO: Not implemented"
 #endif
 
 #define VAPTAG(fun)       useLabel(fun) - (NS + 2) + VAP_TAG
