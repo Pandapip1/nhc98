@@ -72,7 +72,7 @@ void initGc(Int hpSize,NodePtr *ihp,Int spSize,NodePtr **isp)
   if ((long)hpEnd>0x80000000) {
     fprintf(stderr,"OS allocated a heap in high memory (>0x80000000)\n");
     fprintf(stderr,"    which breaks this program's run-time system.\n");
-    fprintf(stderr,"  hpStart=0x%x, hpEnd=0x%x\n",hpStart,hpEnd);
+    fprintf(stderr,"  hpStart=0x%ln, hpEnd=0x%ln\n",hpStart,hpEnd);
     exit(-1);
   }
   if(spEnd <= (NodePtr*)hpStart) {
@@ -121,9 +121,9 @@ void initGc(Int hpSize,NodePtr *ihp,Int spSize,NodePtr **isp)
 void finishGc(NodePtr hp,int verbose)
 {
   if(verbose) {
-    fprintf(stderr,"\n\nUsed  %lld words of heap.\n",(int64_t)(hp-hpBase)+hpTotal);
-    fprintf(stderr,"Moved %lld words of heap in %d gcs.\n",hpMoved,nogc);
-    fprintf(stderr,"%d words to next gc.\n",hpLimit-hp);
+    fprintf(stderr,"\n\nUsed  %ld words of heap.\n",(int64_t)(hp-hpBase)+hpTotal);
+    fprintf(stderr,"Moved %ld words of heap in %d gcs.\n",hpMoved,nogc);
+    fprintf(stderr,"%ld words to next gc.\n",hpLimit-hp);
     fprintf(stderr,"Max live after gc: %ld words.\n",hpMaxSurvive);
   }
 }
@@ -625,22 +625,22 @@ WHEN_DYNAMIC(if(pactive && ((profile|filter) & PROFILE_RETAINER)) remarkRest();)
 
   if(hp+size >= (NodePtr)sp) { /* !!! hpLimit */
     fprintf(stderr,"The program ran out of heap memory.");
-    fprintf(stderr,"  (Current heapsize is %d bytes.)\n",hpSize*sizeof(int));
+    fprintf(stderr,"  (Current heapsize is %ld bytes.)\n",hpSize*sizeof(int));
     fprintf(stderr,"You can set a bigger size with e.g. +RTS -H4M -RTS");
     fprintf(stderr," (4M = four megabytes).\n");
     fprintf(stderr,"GC stats:\n  ");
-    fprintf(stderr,"  Only %d words after gc, need %ld words.\n"
+    fprintf(stderr,"  Only %ld words after gc, need %ld words.\n"
                                                          ,(NodePtr)sp-hp,size);
-    fprintf(stderr,"  Used  %lld words of heap.",(int64_t)(hp-hpBase)+hpTotal);
-    fprintf(stderr,"  Moved %lld words of heap in %d gcs.\n",hpMoved,nogc);
-    fprintf(stderr,"  %d words to next gc.",(NodePtr)sp-hp);
+    fprintf(stderr,"  Used  %ld words of heap.",(int64_t)(hp-hpBase)+hpTotal);
+    fprintf(stderr,"  Moved %ld words of heap in %d gcs.\n",hpMoved,nogc);
+    fprintf(stderr,"  %ld words to next gc.",(NodePtr)sp-hp);
     fprintf(stderr,"  Max live after gc: %ld words.\n",hpMaxSurvive);
     nhc_abort("Insufficient heap memory.");
   }
 
   if(bellGc) {
     fflush(stdout);
-    fprintf(stderr,"<GC %3d:%8d>\n",nogc,hp-&hpLowLimit[GCEXTRA]);
+    fprintf(stderr,"<GC %3d:%8ld>\n",nogc,hp-&hpLowLimit[GCEXTRA]);
   }
   gcForeignObjs();
 

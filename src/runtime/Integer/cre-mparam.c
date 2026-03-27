@@ -106,7 +106,7 @@ int main (int argc, char **argv)
   puts ("");
 
   printf ("#define BITS_PER_MP_LIMB %d\n", bits_uli);
-  printf ("#define BYTES_PER_MP_LIMB %d\n", sizeof(mp_limb));
+  printf ("#define BYTES_PER_MP_LIMB %ld\n", sizeof(mp_limb));
 
   printf ("#define BITS_PER_LONGINT %d\n", bits_uli);
   printf ("#define BITS_PER_INT %d\n", bits_ui);

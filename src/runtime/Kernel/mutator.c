@@ -971,12 +971,12 @@ void run(NodePtr toplevel)
       Break;
 
     UNUSED_INSTRUCTIONS	/* MW */
-      fprintf(stderr,"Unimplemented instruction %d at %lx\n",ip[-1], (UInt)&ip[-1]);
+      fprintf(stderr,"Unimplemented instruction %ld at %lx\n",ip[-1], (UInt)&ip[-1]);
       exit(-1);
 
 #if !defined(USE_GCC_LABELS)
     default:
-      fprintf(stderr,"Unknown instruction %d at %lx\n",ip[-1], (UInt)&ip[-1]);
+      fprintf(stderr,"Unknown instruction %ld at %lx\n",ip[-1], (UInt)&ip[-1]);
       exit(-1);
 #endif
 
