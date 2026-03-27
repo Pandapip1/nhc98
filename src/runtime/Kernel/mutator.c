@@ -929,7 +929,7 @@ void run(NodePtr toplevel)
               break;
           }
         ip  = (CodePtr) ALIGNPTR2(ip+1);
-          ip += *(((short*) ip) + (int) nodeptr);
+          ip += *(((short*) ip) + (intptr_t) nodeptr);
           Break;
 
       Case(LOOKUPSWITCH):	/* DAVID */
@@ -944,7 +944,7 @@ void run(NodePtr toplevel)
           ip = (CodePtr) ALIGNPTR2(ip+1);
 
           for (t = (short*) ip; sz > 0; t = t + 2, sz--) {
-              if (((int) nodeptr) == *t) {
+              if (((intptr_t) nodeptr) == *t) {
                   ip += *(t+1);
                   goto NextInst;
               }

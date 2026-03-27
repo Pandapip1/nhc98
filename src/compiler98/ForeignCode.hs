@@ -473,12 +473,12 @@ hConvert w Word8        s = word "nhc_mkWord8" . parens s
 hConvert w Word16       s = word "nhc_mkWord16" . parens s
 hConvert w Word32       s = word "nhc_mkWord32" . parens s
 hConvert w Word64       s = word "nhc_mkWord64" . parens s
-hConvert w Ptr          s = word "nhc_mkInt" . parens (word "(int)" . s)
-hConvert w (FunPtr _)   s = word "nhc_mkInt" . parens (word "(int)" . s)
-hConvert w StablePtr    s = word "nhc_mkInt" . parens (word "(int)" . s)
+hConvert w Ptr          s = word "nhc_mkInt" . parens (word "(uintptr_t)" . s)
+hConvert w (FunPtr _)   s = word "nhc_mkInt" . parens (word "(uintptr_t)" . s)
+hConvert w StablePtr    s = word "nhc_mkInt" . parens (word "(uintptr_t)" . s)
 {- Returning ForeignPtr's to Haskell is usually illegal: -}
 hConvert w ForeignPtr   s = warning (w "should not return ForeignPtr type.\n") s
-hConvert w Addr         s = word "nhc_mkInt" . parens (word "(int)" . s)
+hConvert w Addr         s = word "nhc_mkInt" . parens (word "(uintptr_t)" . s)
 {- Returning ForeignObj's to Haskell is usually illegal: -}
 hConvert w ForeignObj   s = warning (w "should not return ForeignObj type.\n") s
 hConvert w PackedString s = word "nhc_mkString" . parens (word "(char*)" . s)

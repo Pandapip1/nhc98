@@ -62,10 +62,10 @@ extern void timerStop(timer *);
 
 typedef unsigned char UChar;
 
-typedef UInt   Node;
-typedef Node  *NodePtr;
-typedef UChar  Code;
-typedef Code  *CodePtr;
+typedef UInt     Node;
+typedef Node    *NodePtr;
+typedef intptr_t Code;
+typedef Code    *CodePtr;
 
 typedef UInt  *Cinfo;
 typedef UInt  Coninfo;
@@ -531,7 +531,7 @@ extern void printIns(void);
 /* useful C-macros */
 
 #define IND_REMOVE(p) \
-    while((!((int)p & ZAP_BIT)) && (0==(*p & MASK_WTAG))) p = (NodePtr)*p
+    while((!((intptr_t)p & ZAP_BIT)) && (0==(*p & MASK_WTAG))) p = (NodePtr)*p
 /*  while(0==(*p & MASK_WTAG)) p = (NodePtr)*p  ---- NR */
 
 #define IND_REMOVE_T(p,t) \

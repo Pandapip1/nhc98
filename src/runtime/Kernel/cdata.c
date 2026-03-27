@@ -79,7 +79,7 @@ ForeignObj* allocForeignObj(void* arg, gcCval finalCV, gcFO finalFO)
 
 void freeForeignObj(ForeignObj *cd)
 {
-  /*fprintf(stderr,"freeForeignObj: releasing %d\n",((int)cd-(int)foreign)/sizeof(ForeignObj));*/
+  /*fprintf(stderr,"freeForeignObj: releasing %d\n",((uintptr_t)cd-(uintptr_t)foreign)/sizeof(ForeignObj));*/
   if (cd->gcf)
     cd->gcf(cd);
   else
@@ -184,7 +184,7 @@ C_HEADER(primForeignObj)
   finalise = nodeptr;
 
   fo = allocForeignObj(addr, (gcCval)nhc_mkStablePtr(finalise), gcLater);
-  nodeptr = (NodePtr)nhc_mkRight(nhc_mkCInt((Int)fo));
+  nodeptr = (NodePtr)nhc_mkRight(nhc_mkCInt((uintptr_t)fo));
   C_RETURN(nodeptr);
 }
 #endif
@@ -207,7 +207,7 @@ void *primForeignObjC (void *addr, NodePtr fbox)
   finalise = GET_POINTER_ARG1(fbox,1);
   fo = allocForeignObj(addr, (gcCval)makeStablePtr(finalise), gcLater);
 /*fprintf(stderr,"primForeignObjC: addr=0x%x finaliser=0x%x\n",addr,finalise);*/
-  return nhc_mkCInt((int)fo);
+  return nhc_mkCInt((uintptr_t) fo);
 }
 
 /* foreign import newForeignPtr
@@ -217,7 +217,7 @@ void *primForeignPtrC (gcCval finaliser, void *addr)
   ForeignObj *fo;
   fo = allocForeignObj(addr, finaliser, gcNow);
   /*fprintf(stderr,"primForeignObjC: addr=0x%x finaliser=0x%x fo=0x%x\n",addr,finaliser,fo);*/
-  return nhc_mkCInt((int)fo);
+  return nhc_mkCInt((uintptr_t) fo);
 }
 
 #if 0
@@ -228,7 +228,7 @@ void *
 addrToHandle (void* addr)
 {
   fprintf(stderr,"addrToHandle: addr=0x%x\n",addr);
-  return nhc_mkCInt((int)addr);
+  return nhc_mkCInt((uintptr_t) addr);
 }
 #endif
 
@@ -246,7 +246,7 @@ C_HEADER(reallyFreeForeignObj)
   IND_REMOVE(nodeptr);
   fo = (void*)GET_INT_VALUE(nodeptr);
 
-  /*fprintf(stderr,"reallyFreeForeignObj: releasing %d (0x%x)\n",((int)fo-(int)foreign)/sizeof(ForeignObj),fo);*/
+  /*fprintf(stderr,"reallyFreeForeignObj: releasing %d (0x%x)\n",((uintptr_t)fo-(uintptr_t)foreign)/sizeof(ForeignObj),fo);*/
   freeForeignObj(fo);
   C_RETURN(nhc_mkUnit());
 }
