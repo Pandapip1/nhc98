@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "node.h"
 /*#include "newmacros.h"  -- already included in node.h */
 /*#include "runtime.h"    -- already included in node.h */

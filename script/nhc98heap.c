@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 main(int argc, char **argv)
 {
   int prefix = 1;

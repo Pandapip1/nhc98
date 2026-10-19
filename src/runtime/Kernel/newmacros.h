@@ -119,6 +119,7 @@
 #define C_VAPTAG(fun)       fun - (NS + 2) + VAP_TAG
 #define C_CAPTAG(fun,need)  fun - (NS + 2 + (2 * need)) + VAP_TAG
  
+#include <stdint.h>
 #define useLabel(name)		((uintptr_t) name)
 
  

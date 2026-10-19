@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "newmacros.h"
 
 extern unsigned C0_Builtin_46PrimToken[];

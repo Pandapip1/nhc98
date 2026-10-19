@@ -11,6 +11,7 @@
 #define WHEN_SCC(x) 
 
 #include <stdio.h>
+#include <stdint.h>
 
 /* include file for global definitions */
 

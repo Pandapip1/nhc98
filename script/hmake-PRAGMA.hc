@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "newmacros.h"
 #include "runtime.h"
 
